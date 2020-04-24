@@ -1,0 +1,33 @@
+{
+  "name": "chat-app-friends",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index",
+    "dev": "env-cmd -f ./config/dev.env nodemon src/index.js",
+    "test": "env-cmd ./config/test.env jest --watch --runInBand"
+  },
+  "author": "George Sklavos",
+  "license": "ISC",
+  "dependencies": {
+    "bcrypt": "^3.0.8",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "http-errors": "^1.7.3",
+    "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.15",
+    "moment-timezone": "^0.5.28",
+    "mongodb": "^3.5.2",
+    "mongoose": "^5.8.11",
+    "multer": "^1.4.2",
+    "sharp": "^0.24.0",
+    "socket.io": "^2.3.0",
+    "validator": "^12.2.0",
+    "winston": "^3.2.1"
+  },
+  "devDependencies": {
+    "env-cmd": "^10.0.1",
+    "nodemon": "^2.0.2"
+  }
+}
