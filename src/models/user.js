@@ -8,12 +8,12 @@ const userSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     lastname: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     email: {
       type: String,
@@ -24,17 +24,17 @@ const userSchema = new mongoose.Schema(
         if (!validator.isEmail(value)) {
           throw new Error("Email is invalid");
         }
-      }
+      },
     },
     dateOfBirth: {
       type: Date,
-      required: true
+      required: true,
     },
     password: {
       type: String,
       required: true,
       trim: true,
-      minlength: 7
+      minlength: 7,
     },
     gender: {
       type: String,
@@ -44,26 +44,26 @@ const userSchema = new mongoose.Schema(
         if (!(value === "Male" || value === "Female" || value === "Other")) {
           throw new Error("The value gender is not valid");
         }
-      }
+      },
     },
     tokens: [
       {
         token: {
           type: String,
-          required: true
-        }
-      }
+          required: true,
+        },
+      },
     ],
     avatar: {
-      type: Buffer
-    }
+      type: Buffer,
+    },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
   const user = this;
 
   const userObject = user.toObject();
@@ -77,7 +77,7 @@ userSchema.methods.toJSON = function() {
   return userObject;
 };
 
-userSchema.methods.generateAuthToken = async function() {
+userSchema.methods.generateAuthToken = async function () {
   const user = this;
   const token = jwt.sign({ _id: user.id.toString() }, process.env.JWT_SECRET);
 
@@ -91,19 +91,19 @@ userSchema.statics.findByCredentials = async (email, password) => {
   const user = await User.findOne({ email });
 
   if (!user) {
-    throw new Error("Unable to login user");
+    throw new Error("The email or password is wrong");
   }
 
   const isMatch = await bcrypt.compare(password, user.password);
 
   if (!isMatch) {
-    throw new Error("Unable to login is match");
+    throw new Error("The email or password is wrong");
   }
 
   return user;
 };
 
-userSchema.pre("save", async function(next) {
+userSchema.pre("save", async function (next) {
   const user = this;
 
   if (user.isModified("password")) {
