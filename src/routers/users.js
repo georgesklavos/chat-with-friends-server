@@ -10,7 +10,7 @@ const createError = require("http-errors");
 const Request = require("../models/friendRequests");
 const _ = require("lodash");
 
-router.post("/users", async (req, res, next) => {
+router.post("/api/users", async (req, res, next) => {
   //console.log(req.body);
   const user = new User(req.body);
 
@@ -28,7 +28,7 @@ router.post("/users", async (req, res, next) => {
   }
 });
 
-router.post("/users/login", async (req, res, next) => {
+router.post("/api/users/login", async (req, res, next) => {
   try {
     const user = await User.findByCredentials(
       req.body.email,
@@ -44,7 +44,7 @@ router.post("/users/login", async (req, res, next) => {
   }
 });
 
-router.get("/users/me", auth, async (req, res, next) => {
+router.get("/api/users/me", auth, async (req, res, next) => {
   try {
     res.send(req.user);
   } catch (error) {
@@ -67,7 +67,7 @@ const upload = multer({
   },
 });
 
-router.patch("/users/me", auth, async (req, res, next) => {
+router.patch("/api/users/me", auth, async (req, res, next) => {
   const updates = Object.keys(req.body);
   const allowedUpdates = ["name", "lastname", "password", "dateOfBirth"];
   const isValidOperations = updates.every((update) =>
@@ -91,7 +91,7 @@ router.patch("/users/me", auth, async (req, res, next) => {
 });
 
 router.post(
-  "/users/me/avatar",
+  "/api/users/me/avatar",
   auth,
   upload.single("avatar"),
   async (req, res, next) => {
@@ -111,7 +111,7 @@ router.post(
   }
 );
 
-router.post("/users/logout", auth, async (req, res, next) => {
+router.post("/api/users/logout", auth, async (req, res, next) => {
   try {
     req.user.tokens = req.user.tokens.filter((token) => {
       return token.token !== req.token;
@@ -124,7 +124,7 @@ router.post("/users/logout", auth, async (req, res, next) => {
   }
 });
 
-router.post("/users/logoutAll", auth, async (req, res, next) => {
+router.post("/api/users/logoutAll", auth, async (req, res, next) => {
   try {
     req.user.tokens = [];
     await req.user.save();
@@ -135,7 +135,7 @@ router.post("/users/logoutAll", auth, async (req, res, next) => {
   }
 });
 
-router.delete("/users/delete", auth, async (req, res, next) => {
+router.delete("/api/users/delete", auth, async (req, res, next) => {
   try {
     await User.findOneAndDelete({ _id: req.user.id });
 
@@ -179,7 +179,7 @@ router.delete("/users/delete", auth, async (req, res, next) => {
   }
 });
 
-router.get("/users/:name", auth, async (req, res, next) => {
+router.get("/api/users/:name", auth, async (req, res, next) => {
   try {
     const requests = await Request.find({
       $or: [{ receiver: req.user.id }, { sender: req.user.id }],

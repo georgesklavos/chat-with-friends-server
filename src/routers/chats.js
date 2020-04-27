@@ -6,7 +6,7 @@ const User = require("../models/user");
 const createError = require("http-errors");
 const _ = require("lodash");
 
-router.get("/chats", auth, async (req, res, next) => {
+router.get("/api/chats", auth, async (req, res, next) => {
   try {
     //const chat = await Chat.findOne({ $and: [{ $or: [{ user1: req.params.id }, { user2: req.params.id }] }, { $or: [{ user1: req.user.id }, { user2: req.user.id }] }] });
     const chats = await Chat.find({

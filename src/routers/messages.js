@@ -24,7 +24,7 @@ const upload = multer({
 });
 
 router.post(
-  "/message/:room",
+  "/api/message/:room",
   auth,
   upload.single("message"),
   async (req, res, next) => {
@@ -54,7 +54,7 @@ router.post(
   }
 );
 
-router.get("/message/:chat", auth, async (req, res, next) => {
+router.get("/api/message/:chat", auth, async (req, res, next) => {
   try {
     const room = await Chat.findOne({ _id: req.params.chat });
 

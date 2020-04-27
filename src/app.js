@@ -18,7 +18,38 @@ const User = require("./models/user");
 const app = express();
 const server = http.createServer(app);
 let io = socketio(server);
-io.origins("http://localhost:8080");
+
+app.use(function (req, res, next) {
+  req.io = io;
+  next();
+});
+
+app.use(express.json());
+app.use(userRouter);
+app.use(friendsRouter);
+app.use(roomsRouter);
+// app.use(pagesRouter);
+app.use(messagesRouter);
+app.use(requestsRouter);
+app.use(chatsRouter);
+
+if (process.env.NODE_ENV === "production") {
+  console.log("Here");
+  console.log(path.join(__dirname, "../client"));
+  // Static folder
+  app.use(express.static(path.join(__dirname, "../client/")));
+  // Web Socket
+  io.origins();
+
+  // Handle SPA
+
+  app.get(/.*/, (req, res) => {
+    res.sendFile(path.join(__dirname, "../client/index.html"));
+  });
+} else {
+  io.origins("http://localhost:8080");
+}
+
 io.use(async (socket, next) => {
   try {
     const token = socket.handshake.query.token;
@@ -45,24 +76,10 @@ io.use(async (socket, next) => {
   }
 });
 
-const publicDirectoryPath = path.join(__dirname, "../public");
+// const publicDirectoryPath = path.join(__dirname, "../public");
 
-app.use(express.static(publicDirectoryPath));
+// app.use(express.static(publicDirectoryPath));
 app.use(cors());
-
-app.use(function (req, res, next) {
-  req.io = io;
-  next();
-});
-
-app.use(express.json());
-app.use(userRouter);
-app.use(friendsRouter);
-app.use(roomsRouter);
-app.use(pagesRouter);
-app.use(messagesRouter);
-app.use(requestsRouter);
-app.use(chatsRouter);
 
 app.use(function (err, req, res, next) {
   console.log("Error status: ", err.status);

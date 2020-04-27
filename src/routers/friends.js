@@ -9,7 +9,7 @@ const Chat = require("../models/chat");
 const Message = require("../models/message");
 const { getRequests } = require("./socketsRequests");
 
-router.post("/friends/:id", auth, async (req, res, next) => {
+router.post("/api/friends/:id", auth, async (req, res, next) => {
   try {
     // const userForFriendRequest = await User.findOne({ _id: req.params.id });
 
@@ -87,7 +87,7 @@ router.post("/friends/:id", auth, async (req, res, next) => {
   }
 });
 
-router.get("/friends", auth, async (req, res, next) => {
+router.get("/api/friends", auth, async (req, res, next) => {
   try {
     const documentWithFriends = await Friends.findOne({ person: req.user._id });
     let friendsData = [];
@@ -108,7 +108,7 @@ router.get("/friends", auth, async (req, res, next) => {
   }
 });
 
-router.delete("/friends/:id", auth, async (req, res, next) => {
+router.delete("/api/friends/:id", auth, async (req, res, next) => {
   try {
     const userForDelete = await User.findOne({ _id: req.params.id });
 

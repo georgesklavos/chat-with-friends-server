@@ -7,7 +7,7 @@ const Chat = require("../models/chat");
 const createError = require("http-errors");
 const router = new express.Router();
 
-router.post("/request/accept/:id", auth, async (req, res, next) => {
+router.post("/api/request/accept/:id", auth, async (req, res, next) => {
   try {
     const requests = await Request.find({
       receiver: req.user.id,
@@ -68,7 +68,7 @@ router.post("/request/accept/:id", auth, async (req, res, next) => {
   }
 });
 
-router.post("/request/decline/:id", auth, async (req, res, next) => {
+router.post("/api/request/decline/:id", auth, async (req, res, next) => {
   try {
     const requests = await Request.find({
       receiver: req.user.id,
@@ -122,7 +122,7 @@ router.post("/request/decline/:id", auth, async (req, res, next) => {
   }
 });
 
-router.get("/request", auth, async (req, res, next) => {
+router.get("/api/request", auth, async (req, res, next) => {
   try {
     const requests = await Request.find({ receiver: req.user.id });
     let requestsFinal = [];
