@@ -1,19 +1,19 @@
 const express = require("express");
-require("./db/mongoose");
-const userRouter = require("./routers/users");
-const friendsRouter = require("./routers/friends");
-const roomsRouter = require("./routers/rooms");
-const pagesRouter = require("../src/routers/pages");
-const messagesRouter = require("../src/routers/messages");
-const requestsRouter = require("./routers/requests");
-const chatsRouter = require("./routers/chats");
-const logger = require("./middleware/logger");
+require("./src/db/mongoose");
+const userRouter = require("./src/routers/users");
+const friendsRouter = require("./src/routers/friends");
+const roomsRouter = require("./src/routers/rooms");
+const pagesRouter = require("./src/routers/pages");
+const messagesRouter = require("./src/routers/messages");
+const requestsRouter = require("./src/routers/requests");
+const chatsRouter = require("./src/routers/chats");
+const logger = require("./src/middleware/logger");
 const cors = require("cors");
 const path = require("path");
 const socketio = require("socket.io");
 const http = require("http");
 const jwt = require("jsonwebtoken");
-const User = require("./models/user");
+const User = require("./src/models/user");
 
 const app = express();
 const server = http.createServer(app);
@@ -34,17 +34,15 @@ app.use(requestsRouter);
 app.use(chatsRouter);
 
 if (process.env.NODE_ENV === "production") {
-  console.log("Here");
-  console.log(path.join(__dirname, "../client"));
   // Static folder
-  app.use(express.static(path.join(__dirname, "../client/")));
+  app.use(express.static(path.join(__dirname, "/client/")));
   // Web Socket
   io.origins();
 
   // Handle SPA
 
   app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, "../client/index.html"));
+    res.sendFile(path.join(__dirname, "/client/index.html"));
   });
 } else {
   io.origins("http://localhost:8080");
@@ -109,7 +107,7 @@ io.on("connection", (socket) => {
     callback();
   });
 
-  require("./routers/socketsRequests")(socket, io);
+  require("./src/routers/socketsRequests")(socket, io);
 
   socket.on("disconnect", () => {
     console.log("disconnect");
