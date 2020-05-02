@@ -35,14 +35,14 @@ app.use(chatsRouter);
 
 if (process.env.NODE_ENV === "production") {
   // Static folder
-  app.use(express.static(path.join(__dirname, "/client/")));
+  app.use(express.static(path.join(__dirname, "/public/")));
   // Web Socket
   io.origins();
 
   // Handle SPA
 
   app.get(/.*/, (req, res) => {
-    res.sendFile(path.join(__dirname, "/client/index.html"));
+    res.sendFile(path.join(__dirname, "/public/index.html"));
   });
 } else {
   io.origins("http://localhost:8080");
