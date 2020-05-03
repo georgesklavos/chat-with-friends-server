@@ -11,12 +11,10 @@ async function messages(socket, io) {
 
   socket.on(`messageGet-${socket.user._id}`, async (data) => {
     let friend = data.friend;
-    console.log(data);
     delete data.friend;
     const message = new Message(data);
 
     await message.save();
-    console.log(`messageSend-${friend}-${data.chat}`);
     io.emit(`messageSend-${friend}-${data.chat}`, message);
   });
 

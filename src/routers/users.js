@@ -192,7 +192,7 @@ router.get("/api/users/:name", auth, async (req, res, next) => {
     let data = [];
 
     requests.forEach((el) => {
-      if (el.sender !== req.user.id) {
+      if (!el.sender.equals(req.user.id)) {
         data.push(el.sender);
       } else {
         data.push(el.receiver);

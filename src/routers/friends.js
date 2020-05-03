@@ -144,8 +144,8 @@ router.delete("/api/friends/:id", auth, async (req, res, next) => {
 
     await Message.deleteMany({ chat: chat });
 
-    req.io.emit(`deleteFriend-${req.user.id}`);
-    req.io.emit(`deleteFriend-${req.params.id}`);
+    req.io.emit(`deleteFriend-${req.user.id}`, req.params.id);
+    req.io.emit(`deleteFriend-${req.params.id}`, req.user.id);
 
     res.send();
   } catch (error) {
